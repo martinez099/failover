@@ -1,7 +1,6 @@
 package com.redislabs.demo.failover;
 
 import io.lettuce.core.RedisCommandTimeoutException;
-import io.lettuce.core.RedisConnectionException;
 import io.lettuce.core.RedisException;
 
 import java.util.logging.Logger;
@@ -73,18 +72,14 @@ public class Failover {
     }
 
     public void runComputation() {
-        logger.info("running against connection " + this.connections[this.currentConnectionIdx].getUrl());
-        try {
-            this.connections[this.currentConnectionIdx].putTraffic();
-        } catch (RedisCommandTimeoutException e) {
-            logger.severe(e.toString());
+        while(true) {
+            logger.info("running against connection " + this.connections[this.currentConnectionIdx].getUrl());
             try {
-                this.connections[this.currentConnectionIdx].exec().ping();
-            } catch (RedisConnectionException e2) {
-                logger.severe(e2.toString());
+                this.connections[this.currentConnectionIdx].putTraffic();
+            } catch (RedisCommandTimeoutException e) {
+                logger.severe(e.toString());
                 this.performFailover();
             }
-            this.runComputation();
         }
     }
 
