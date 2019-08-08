@@ -34,16 +34,17 @@ public class Failover {
 
     }
 
-    public void createConnections(String[] urls) {
-        this.connections = new RedisConnection[urls.length];
-        for (int i = 0; i < urls.length; i++) {
-            String[] parts  = urls[i].split(":", 4);
+    public void createConnections(String[] args) {
+        this.connections = new RedisConnection[args.length - 1];
+        for (int i = 0; i < args.length - 1; i++) {
+            String[] parts  = args[i].split(":", 4);
             this.connections[i] = new RedisConnection(
                     parts[0],
                     Integer.parseInt(parts[1]),
                     parts[2],
                     Integer.parseInt(parts[3]),
-                    10);
+                    Integer.parseInt(args[args.length - 1])
+            );
         }
     }
 
