@@ -1,9 +1,19 @@
 # failover
 This is an implementation of a failover mechanism for multiple Redis server instances in an active-passive setup.
 
+##Prerequisites
+
+* Java 1.8
+* Maven 3
+* Docker 18
+
+## Setup
+
 1. install the client:
 
-   ```mvn clean install```
+   ```mvn clean compile```
+   
+## Run
    
 2. start the docker containers:
 
