@@ -4,9 +4,13 @@ import io.lettuce.core.ClientOptions;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
+import io.lettuce.core.event.Event;
+import io.lettuce.core.event.EventBus;
 
 import java.nio.charset.Charset;
 import java.util.Random;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class RedisConnection {
 
@@ -39,6 +43,10 @@ public class RedisConnection {
         this.connect();
     }
 
+    public void addEventHandler(Consumer<? super Event> handler) {
+        this.client.getResources().eventBus().get().subscribe(handler);
+    }
+
     public String getInternalHost() { return this.internalHost; }
 
     public int getInternalPort() { return this.internalPort; }
@@ -62,8 +70,8 @@ public class RedisConnection {
         }
         while(true) {
             String key = getRandomString(12);
-            syncCommands.set(key, getRandomString(32));
-            syncCommands.get(key);
+            this.syncCommands.set(key, getRandomString(32));
+            this.syncCommands.get(key);
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {

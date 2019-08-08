@@ -2,7 +2,11 @@ package com.redislabs.demo.failover;
 
 import io.lettuce.core.RedisCommandTimeoutException;
 import io.lettuce.core.RedisException;
+import io.lettuce.core.event.Event;
+import io.lettuce.core.event.connection.ConnectionActivatedEvent;
 
+import java.net.SocketAddress;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 public class Failover {
